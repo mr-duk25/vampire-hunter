@@ -1,7 +1,7 @@
 // Global Variables
 let xp = 0;
 let health = 100;
-let gold = 50;
+let gold = 250;
 let currentWeapon = 0;
 let fighting;
 let monsterHealth;
@@ -47,6 +47,7 @@ const locations = [
 // DOM elements
 const button1 = document.querySelector('#button1')
 const button2 = document.querySelector('#button2')
+const button2Color = document.querySelector('#button2')
 const button3 = document.querySelector('#button3')
 const text1 = document.querySelector('#textboxone')
 const text2 = document.querySelector('#textboxtwo')
@@ -103,6 +104,7 @@ if(gold >= 10) {
 
 }
 function buyWeapon() {
+    if(currentWeapon < weapons.length - 1) {
     if(gold >= 30) {
         gold -= 30;
         currentWeapon ++;
@@ -111,7 +113,26 @@ function buyWeapon() {
         newWeapon = weapons[currentWeapon].name;
         text1.innerText = `Added ${newWeapon} to your bag`
         inventory.push(newWeapon);
-        text2.innerText = '- in your inventory: ' + inventory + '.';
+        text1.innerText += '- in your inventory: ' + inventory + '.';
+    } else {
+        text1.innerText = 'You do not have enough gold to buy a weapon.';
+      }
+    } else {
+        text1.innerText = 'You already have the most powerful weapon!';
+        button2.innerText = "Sell weapon for 15 gold";
+        button2.onclick = sellWeapon;
+        // button2Color.style.background = '#35a6f2';
+    }
+}
+
+function sellWeapon() {
+    if(inventory.length > 1) {
+        gold += 15;
+        goldText.innerText = gold;
+        let currentWeapon = inventory.shift();
+        text1.innerText = 'You sold a ' + currentWeapon + '.';
+        text1.innerText += ' In your inventory you have: ' + inventory + '.';
+        text2.innerText += ' ' ;
     }
 }
 
