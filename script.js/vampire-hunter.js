@@ -41,27 +41,20 @@ button3.onclick = fightMasterVamp;
 
 // Functions
 function update(location) {
-
+    button1.innerText = location['button text'][0];
+    button2.innerText = location['button text'][1];
+    button3.innerText = location['button text'][2];
+    button1.onclick = location['button functions'][0];
+    button2.onclick = location['button functions'][1];
+    button3.onclick = location['button functions'][2];
+    text1.innerText = location.text1;
 }
 function goTown() {
-button1.innerText = 'Visit the Blacksmith';
-button2.innerText = 'Visit the Cave';
-button3.innerText = 'Fight the Master Vampire';
-button1.onclick = visitBlacksmith;
-button2.onclick = visitCave;
-button3.onclick = fightMasterVamp;
-text1.innerText = "You are in the town square. You see a sign that says \"Blacksmith\".";
+    update(locations[0])
 }
 
 function visitBlacksmith() {
-button1.innerText = 'Buy 10 health (10 gold)';
-button2.innerText = 'Buy weapon (30 gold)';
-button3.innerText = 'Return to town square';
-button1.onclick = buyHealth;
-button2.onclick = buyWeapon;
-button3.onclick = goTown;
-text1.innerText = "You enter the store"
-
+update(locations[1])
 }
 function visitCave() {
 console.log('Going to Cave.')
@@ -75,6 +68,13 @@ console.log('+10 HP!')
 }
 function buyWeapon() {
 console.log('Blacksmith Cyrus: fresh off the iron')
+}
+
+function fightBat() {
+    
+}
+function fightWolf() {
+
 }
 
 
