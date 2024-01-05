@@ -8,6 +8,11 @@ body {
     color: white;
     padding: 10px;
 }
+#textboxtwo {
+    background-color: #8f1431;
+    color: white;
+    padding: 10px;
+}
 
 #game {
     max-width:500px;

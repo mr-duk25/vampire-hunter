@@ -5,7 +5,24 @@ let gold = 50;
 let currentWeapon = 0;
 let fighting;
 let monsterHealth;
-let inventory = ['stick'];
+let inventory = ['slingshot'];
+const weapons = [
+    {
+        name: 'slingshot',
+        power: 5
+    }, 
+    {
+        name: 'medievil dagger',
+        power: 30
+    }, 
+    {
+        name: 'Imperial spear',
+        power: 50
+    }, 
+    {
+        name: 'Silver Broadsword',
+        power: 100
+    }];
 const locations = [
     {
         name: 'town square',
@@ -15,9 +32,15 @@ const locations = [
     },
     {
         name: 'store',
-        'button text': ['Buy 10 health (10 gold)', 'Buy weapon (30 gold)', 'Return to town square'],
+        'button text': ['Buy 10 health (10 gold)', 'Buy weapon (30 gold)', 'Go to town square'],
         'button functions': [buyHealth, buyWeapon, goTown],
         text1: 'you enter the store.'
+    },
+    {
+        name: 'cave',
+        'button text': ['Fight bat', 'Fight wolf', 'Go to town square'],
+        'button functions': [fightBat, fightWolf, goTown],
+        text1: 'You enter the cave. You see some creatures'
     }
 ];
 
@@ -26,7 +49,7 @@ const button1 = document.querySelector('#button1')
 const button2 = document.querySelector('#button2')
 const button3 = document.querySelector('#button3')
 const text1 = document.querySelector('#textboxone')
-const text2 = document.querySelector('#textboxone')
+const text2 = document.querySelector('#textboxtwo')
 const xpText = document.querySelector('#xpText')
 const healthText = document.querySelector('#healthText')
 const goldText = document.querySelector('#goldText')
@@ -57,17 +80,39 @@ function visitBlacksmith() {
 update(locations[1])
 }
 function visitCave() {
-console.log('Going to Cave.')
+update(locations[2])
 }
 function fightMasterVamp() {
     console.log('Going to fight the Master Vampire.')
 }
 
 function buyHealth() {
-console.log('+10 HP!')
+if(gold >= 10) {
+    gold -= 10;
+        health += 10;
+    goldText.innerText = gold;
+    healthText.innerText = health;
+    text2.innerText = '+10 HP!'
+    setTimeout(() => {
+        text2.innerText = ' ';
+        console.log('Delayed for 1 second.');
+    }, 1000);;
+} else {
+    text1.innerText = 'Not enough gold, traveler.';
+}
+
 }
 function buyWeapon() {
-console.log('Blacksmith Cyrus: fresh off the iron')
+    if(gold >= 30) {
+        gold -= 30;
+        currentWeapon ++;
+        goldText.innerText = gold;
+        let newWeapon = weapons;
+        newWeapon = weapons[currentWeapon].name;
+        text1.innerText = `Added ${newWeapon} to your bag`
+        inventory.push(newWeapon);
+        text2.innerText = '- in your inventory: ' + inventory + '.';
+    }
 }
 
 function fightBat() {
