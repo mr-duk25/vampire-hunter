@@ -34,7 +34,7 @@ body {
     text-align: center;
   }
 
-  #monsterStats {
+  #creatureStats {
     display: none;
     border: 1px solid #8f1431;
     padding: 5px;

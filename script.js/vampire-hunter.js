@@ -4,7 +4,7 @@ let health = 100;
 let gold = 250;
 let currentWeapon = 0;
 let fighting;
-let monsterHealth;
+let creatureHealth;
 let inventory = ['slingshot'];
 const weapons = [
     {
@@ -23,6 +23,22 @@ const weapons = [
         name: 'Silver Broadsword',
         power: 100
     }];
+const creatures = [
+    {
+    name: "bat",
+    level: 2,
+    health: 15 
+    }, 
+    {
+    name: "wolf",
+    level: 8,
+    health: 60
+    }, 
+    {
+    name: "Master Vampire",
+    level: 20,
+    health: 300
+    }]
 const locations = [
     {
         name: 'town square',
@@ -41,6 +57,12 @@ const locations = [
         'button text': ['Fight bat', 'Fight wolf', 'Go to town square'],
         'button functions': [fightBat, fightWolf, goTown],
         text1: 'You enter the cave. You see some creatures'
+    }, 
+    {
+        name: "fight",
+        "button text": ["Attack", "Dodge", "Run"],
+        "button functions": [attack, dodge, goTown],
+        text1: "You are fighting a creature."
     }
 ];
 
@@ -54,9 +76,9 @@ const text2 = document.querySelector('#textboxtwo')
 const xpText = document.querySelector('#xpText')
 const healthText = document.querySelector('#healthText')
 const goldText = document.querySelector('#goldText')
-const monsterStats = document.querySelector('#monsterStats')
-const monsterName = document.querySelector('#monsterName')
-const monsterHealthText = document.querySelector('#monsterHealth')
+const creatureStats = document.querySelector('#creatureStats')
+const creatureName = document.querySelector('#creatureName')
+const creatureHealthText = document.querySelector('#creatureHealth')
 
 // initialize buttons
 button1.onclick = visitBlacksmith;
@@ -83,40 +105,37 @@ update(locations[1])
 function visitCave() {
 update(locations[2])
 }
-function fightMasterVamp() {
-    console.log('Going to fight the Master Vampire.')
-}
 
 function buyHealth() {
-if(gold >= 10) {
-    gold -= 10;
+    if(gold >= 10) {
+        gold -= 10;
         health += 10;
-    goldText.innerText = gold;
-    healthText.innerText = health;
-    text2.innerText = '+10 HP!'
-    setTimeout(() => {
-        text2.innerText = ' ';
-        console.log('Delayed for 1 second.');
-    }, 1000);;
-} else {
-    text1.innerText = 'Not enough gold, traveler.';
-}
-
+        goldText.innerText = gold;
+        healthText.innerText = health;
+        text2.innerText = '+10 HP!'
+        setTimeout(() => {
+            text2.innerText = ' ';
+            console.log('Delayed for 1 second.');
+        }, 1000);;
+    } else {
+        text1.innerText = 'Not enough gold, traveler.';
+    }
+    
 }
 function buyWeapon() {
     if(currentWeapon < weapons.length - 1) {
-    if(gold >= 30) {
-        gold -= 30;
-        currentWeapon ++;
-        goldText.innerText = gold;
-        let newWeapon = weapons;
-        newWeapon = weapons[currentWeapon].name;
-        text1.innerText = `Added ${newWeapon} to your bag`
-        inventory.push(newWeapon);
-        text1.innerText += '- in your inventory: ' + inventory + '.';
-    } else {
-        text1.innerText = 'You do not have enough gold to buy a weapon.';
-      }
+        if(gold >= 30) {
+            gold -= 30;
+            currentWeapon ++;
+            goldText.innerText = gold;
+            let newWeapon = weapons;
+            newWeapon = weapons[currentWeapon].name;
+            text1.innerText = `Added ${newWeapon} to your bag`
+            inventory.push(newWeapon);
+            text1.innerText += '- in your inventory: ' + inventory + '.';
+        } else {
+            text1.innerText = 'You do not have enough gold to buy a weapon.';
+        }
     } else {
         text1.innerText = 'You already have the most powerful weapon!';
         button2.innerText = "Sell weapon for 15 gold";
@@ -133,14 +152,41 @@ function sellWeapon() {
         text1.innerText = 'You sold a ' + currentWeapon + '.';
         text1.innerText += ' In your inventory you have: ' + inventory + '.';
         text2.innerText += ' ' ;
+    } else {
+        text.innerText = "Don't sell your only weapon!"
     }
 }
 
+function goFight() {
+    update(locations[3]);
+    creatureHealth = creatures[fighting].health;
+    creatureStats.style.display = "block";
+    creatureName.innerText = creatures[fighting].name;
+    creatureHealthText.innerText = creatures[fighting].health;
+}
+
 function fightBat() {
-    
+    fighting = 0;
+    goFight();
 }
 function fightWolf() {
+    fighting = 1;
+    goFight()
+}
+    
 
+function fightMasterVamp() {
+    fighting = 2;
+    goFight();
 }
 
-
+function attack() {
+    text1.innerText = 'The ' + creatures[fighting].name + ' attacks.';
+    text1.innerText += ' You attack it with your ' + weapons[currentWeapon].name + '.';
+    health -= creatures[fighting].level;
+    creatureHealth -= weapons[currentWeapon].power;
+}
+    
+function dodge() {
+      
+    }
