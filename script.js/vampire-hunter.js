@@ -44,7 +44,7 @@ const locations = [
         name: 'town square',
         'button text': ['Visit the blacksmith', 'visit the cave', 'Fight the Master Vampire'],
         'button functions': [visitBlacksmith, visitCave, fightMasterVamp],
-        text1: "You are in the town square. You see a sign that says \"Blacksmith\"."
+        text1: 'You are in the town square. You see a sign that says \'Blacksmith\'.'
     },
     {
         name: 'store',
@@ -59,11 +59,31 @@ const locations = [
         text1: 'You enter the cave. You see some creatures'
     }, 
     {
-        name: "fight",
-        "button text": ["Attack", "Dodge", "Run"],
-        "button functions": [attack, dodge, goTown],
-        text1: "You are fighting a creature."
-    }
+        name: 'fight',
+        'button text': ['Attack', 'Dodge', 'Run'],
+        'button functions': [attack, dodge, goTown],
+        text1: 'You are fighting a creature.'
+    },
+    {
+
+         name: 'kill creature',
+         'button text': ['Go to town square', 'Go to town square', 'Go to town square'],
+         'button functions': [goTown, goTown, goTown],
+        text1: 'The creature screams "Arg!" as it dies. You gain experience points and find gold.'
+          
+    },
+    {
+        name: 'lose',
+        'button text': ['REPLAY?', 'REPLAY?', 'REPLAY?'],
+        'button functions': [restart, restart, restart],
+        text1: 'You die. ☠️'
+      },
+      {
+        name: "win",
+        "button text": ["REPLAY?", "REPLAY?", "REPLAY?"],
+        "button functions": [restart, restart, restart],
+        text1: "You defeat the dragon! YOU WIN THE GAME! 🎉"
+      }
 ];
 
 // DOM elements
@@ -87,6 +107,7 @@ button3.onclick = fightMasterVamp;
 
 // Functions
 function update(location) {
+    creatureStats.style.display = 'none';
     button1.innerText = location['button text'][0];
     button2.innerText = location['button text'][1];
     button3.innerText = location['button text'][2];
@@ -138,7 +159,7 @@ function buyWeapon() {
         }
     } else {
         text1.innerText = 'You already have the most powerful weapon!';
-        button2.innerText = "Sell weapon for 15 gold";
+        button2.innerText = 'Sell weapon for 15 gold';
         button2.onclick = sellWeapon;
         // button2Color.style.background = '#35a6f2';
     }
@@ -160,7 +181,7 @@ function sellWeapon() {
 function goFight() {
     update(locations[3]);
     creatureHealth = creatures[fighting].health;
-    creatureStats.style.display = "block";
+    creatureStats.style.display = 'block';
     creatureName.innerText = creatures[fighting].name;
     creatureHealthText.innerText = creatures[fighting].health;
 }
@@ -184,9 +205,44 @@ function attack() {
     text1.innerText = 'The ' + creatures[fighting].name + ' attacks.';
     text1.innerText += ' You attack it with your ' + weapons[currentWeapon].name + '.';
     health -= creatures[fighting].level;
-    creatureHealth -= weapons[currentWeapon].power;
+    creatureHealth -= weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;
+    healthText.innerText = health;
+    creatureHealthText.innerText = creatureHealth;
+    if (health <= 0){
+        lose();
+    } else if(creatureHealth <= 0) {
+    fighting === 2 ? winGame() : defeatCreature();
+    } 
 }
     
 function dodge() {
-      
+      text1.innerText = 'You dodge the attack from the ' + creatures[fighting].name
     }
+
+function defeatCreature() {
+gold += Math.floor(creatures[fighting].level * 6.7)
+xp += creatures[fighting].level
+goldText.innerText = gold;
+xpText.innerText = xp;
+update(locations[4]);
+}
+
+function lose() {
+update(locations[5]);
+}
+
+function winGame() {
+    update(locations[6]);
+}
+
+function restart() {
+xp = 0;
+xpText.innerText = xp;
+health = 100;
+healthText.innerText = health;
+gold = 50;
+goldText.innerText = gold;
+currentWeapon = 0;
+inventory = ['slingshot'];
+goTown();
+}
